@@ -1,12 +1,10 @@
 const project = require('./index.js');
 const argParse = require('subheaven-arg');
-const markshell = require('markshell');
 
 argParse.init("subheaven-npm-base", "Cumprimenta alguém");
 argParse.positional("name", "Nome a ser cumprimentado", { required: false, default: "", sample: "SubHeaven" });
 (async() => {
     if (argParse.validate()) {
-        markshell.toConsole(`${__dirname}\\README.md`);
         //////////////////////////////////////////////////////////////////////////////////////////////
         /// ADICIONAR TAREFA
 
@@ -65,14 +63,14 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //////////////////////////////////////////////////////
         /// LISTAR TAREFAS
 
-        // console.log("//////////////////////////////////////////////////////////////////");
-        // console.log("///// LISTAR TAREFAS")
-        // console.log("//////////////////////////////////////////////////////////////////");
-        // let tasks = await project.list('fila_teste');
-        // await tasks.forEachAsync(task => {
-        //     console.log("");
-        //     console.log(task);
-        // });
+        console.log("//////////////////////////////////////////////////////////////////");
+        console.log("///// LISTAR TAREFAS")
+        console.log("//////////////////////////////////////////////////////////////////");
+        let tasks = await project.list('fila_teste');
+        await tasks.forEachAsync(task => {
+            console.log("");
+            console.log(task);
+        });
 
         //////////////////////////////////////////////////////
         /// LISTAR HISTORICO
