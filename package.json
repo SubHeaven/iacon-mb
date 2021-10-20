@@ -1,0 +1,32 @@
+{
+    "name": "iacon-mb",
+    "version": "0.0.1",
+    "description": "A simple npm cli/tool project",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "bin": {
+        "iacon-mb": "./cli.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SubHeaven/iacon-mb.git"
+    },
+    "author": {
+        "name": "SubHeaven",
+        "email": "subheaven.paulo@gmail.com"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/SubHeaven/iacon-mb/issues"
+    },
+    "homepage": "https://github.com/SubHeaven/iacon-mb#readme",
+    "dependencies": {
+        "acebase": "^1.8.2",
+        "debug": "^4.3.1",
+        "subheaven-arg": "github:SubHeaven/subheaven-arg",
+        "subheaven-env": "github:SubHeaven/subheaven-env",
+        "subheaven-tools": "github:SubHeaven/subheaven-tools"
+    }
+}
