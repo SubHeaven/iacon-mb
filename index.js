@@ -7,17 +7,20 @@ env.addParams([
     { name: 'DBPATH', description: 'Caminho da pasta do banco de dados', required: true, sample: './db' },
     { name: 'DBNAME', description: 'Nome do banco de dados', required: true, sample: 'iacon' }
 ]);
-env.config();
+(async() => {
+    await env.config();
 
-if (!fs.existsSync(process.env.DBPATH)) {
-    fs.mkdirSync(process.env.DBPATH);
-}
+    if (!fs.existsSync(process.env.DBPATH)) {
+        log(process.env)
+        fs.mkdirSync(process.env.DBPATH);
+    }
 
-exports.ready = false;
-
-const { AceBase } = require('acebase');
-const options = { info: '', logLevel: 'error', storage: { path: process.env.DBPATH } };
-const db = new AceBase(process.env.DBNAME, options);
+    exports.ready = false;
+    
+    const { AceBase } = require('acebase');
+    const options = { info: '', logLevel: 'error', storage: { path: process.env.DBPATH } };
+    const db = new AceBase(process.env.DBNAME, options);
+})();
 
 exports.insert = (collection, data) => {
     return new Promise((resolve, reject) => {
@@ -238,7 +241,43 @@ exports.close = (name, id) => {
     });
 }
 
-exports.queues = (all = false) => {
+exports.queueDetail = async (name) => {
+    let detail = {
+        name: name,
+        erros: [],
+        pendentes: [],
+        history: []
+    };
+    let tasks = await exports.findAll(name);
+    await tasks.forEachAsync(item => {
+        if (item.tryout > 0) {
+            detail.erros.push({
+                _id: item._id,
+                payload: item.payload,
+                log: item.log,
+                history: item.history
+            });
+        } else {
+            detail.pendentes.push({
+                _id: item._id,
+                payload: item.payload,
+                log: item.log,
+                history: item.history
+            });
+        }
+    });
+    detail.history = await exports.findAll(`${name}_hist`);
+    detail.history = JSON.parse(JSON.stringify(detail.history));
+    return detail;
+}
+
+exports.queues = (all = false, details = false) => {
+    let mountDetails = async (refs) => {
+        await refs.forEachAsync(async (item, index) => {
+            refs[index] = await exports.queueDetail(item);
+        });
+        return refs;
+    }
     return new Promise((resolve, reject) => {
         try {
             db.ready(() => {
@@ -246,6 +285,7 @@ exports.queues = (all = false) => {
                 .get(async snapshot => {
                     let refs = JSON.parse(JSON.stringify(snapshot.map(item => item.ref.path), null, 4));
                     if (!all) refs = refs.filter(item => item.indexOf('_hist') !== (item.length - 5));
+                    if (details) refs = await mountDetails(refs);
                     resolve(refs);
                 });
             });
@@ -253,6 +293,16 @@ exports.queues = (all = false) => {
             reject(e);
         }
     });
+}
+
+exports.clearHistory = async (name) => {
+    const h_size = 100;
+    let history = await exports.findAll(`${name}_hist`);
+
+    while (history.length > h_size) {
+        let item = history.shift();
+        await project.remove(`${name}_hist`, item._id);
+    }
 }
 
 exports.process = async (name, callback, debug=false) => {
@@ -307,6 +357,7 @@ exports.process = async (name, callback, debug=false) => {
                         });
                         log("Finalizando processo.");
                         await exports.remove(name, task._id);
+                        await exports.clearHistory(name);
                     } catch (ex) {
                         log("Erro ao executar processo:");
                         _oldlog("Erro ao executar processo:");
@@ -318,6 +369,7 @@ exports.process = async (name, callback, debug=false) => {
                         _oldlog(_log);
 
                         task.log = _log;
+                        task.tryout = task.tryout + 1;
                         await exports.update(name, task._id, task);
                         await exports.rearm(name, task._id);
                     } finally {

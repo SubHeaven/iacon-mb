@@ -31,7 +31,7 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //     console.log(task);
         //     console.log('payload');
         //     console.log(payload);
-        //     //task.oioioi();
+        //     task.oioioi();
         //     console.log("Task processada");
         // }, debug=true);
 
@@ -113,16 +113,30 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //////////////////////////////////////////////////////
         /// LISTAR FILAS
 
+        await project.clearHistory('fila_teste');
+
         console.log("//////////////////////////////////////////////////////////////////");
         console.log("///// LISTAR FILAS")
         console.log("//////////////////////////////////////////////////////////////////");
         let queues = await project.queues();
-        await tools.debug(queues);
+        await queues.forEachAsync(item => {
+            console.log(item);
+        });
+        console.log("");
 
         console.log("//////////////////////////////////////////////////////////////////");
         console.log("///// LISTAR TODAS AS FILAS")
         console.log("//////////////////////////////////////////////////////////////////");
-        let allQueues = await project.queues(all=true);
-        await tools.debug(allQueues);
+        let allQueues = await project.queues(true);
+        await allQueues.forEachAsync(item => {
+            console.log(item);
+        });
+        console.log("");
+
+        console.log("//////////////////////////////////////////////////////////////////");
+        console.log("///// LISTAR FILAS COM RESUMO")
+        console.log("//////////////////////////////////////////////////////////////////");
+        let detailQueues = await project.queues(false, true);
+        await tools.debug(JSON.stringify(detailQueues, null, 4));
     }
 })();
