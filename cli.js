@@ -1,5 +1,6 @@
 const project = require('./index.js');
 const argParse = require('subheaven-arg');
+const tools = require('subheaven-tools');
 
 argParse.init("subheaven-npm-base", "Cumprimenta alguém");
 argParse.positional("name", "Nome a ser cumprimentado", { required: false, default: "", sample: "SubHeaven" });
@@ -63,14 +64,14 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //////////////////////////////////////////////////////
         /// LISTAR TAREFAS
 
-        console.log("//////////////////////////////////////////////////////////////////");
-        console.log("///// LISTAR TAREFAS")
-        console.log("//////////////////////////////////////////////////////////////////");
-        let tasks = await project.list('fila_teste');
-        await tasks.forEachAsync(task => {
-            console.log("");
-            console.log(task);
-        });
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // console.log("///// LISTAR TAREFAS")
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // let tasks = await project.list('fila_teste');
+        // await tasks.forEachAsync(task => {
+        //     console.log("");
+        //     console.log(task);
+        // });
 
         //////////////////////////////////////////////////////
         /// LISTAR HISTORICO
@@ -108,5 +109,20 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //     console.log(task);
         // });
         // await project.remove('fila_teste_hist', 'kt4q29q9000p489g3wmb97xs');
+
+        //////////////////////////////////////////////////////
+        /// LISTAR FILAS
+
+        console.log("//////////////////////////////////////////////////////////////////");
+        console.log("///// LISTAR FILAS")
+        console.log("//////////////////////////////////////////////////////////////////");
+        let queues = await project.queues();
+        await tools.debug(queues);
+
+        console.log("//////////////////////////////////////////////////////////////////");
+        console.log("///// LISTAR TODAS AS FILAS")
+        console.log("//////////////////////////////////////////////////////////////////");
+        let allQueues = await project.queues(all=true);
+        await tools.debug(allQueues);
     }
 })();

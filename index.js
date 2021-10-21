@@ -238,6 +238,23 @@ exports.close = (name, id) => {
     });
 }
 
+exports.queues = (all = false) => {
+    return new Promise((resolve, reject) => {
+        try {
+            db.ready(() => {
+                db.query('')
+                .get(async snapshot => {
+                    let refs = JSON.parse(JSON.stringify(snapshot.map(item => item.ref.path), null, 4));
+                    if (!all) refs = refs.filter(item => item.indexOf('_hist') !== (item.length - 5));
+                    resolve(refs);
+                });
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
 exports.process = async (name, callback, debug=false) => {
     if (debug) {
         local_log = (msg) => { console.log(msg); };
