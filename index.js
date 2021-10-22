@@ -19,20 +19,27 @@ env.addParams([
     
     const { AceBase } = require('acebase');
     const options = { info: '', logLevel: 'error', storage: { path: process.env.DBPATH } };
-    const db = new AceBase(process.env.DBNAME, options);
+    exports.db = new AceBase(process.env.DBNAME, options);
 })();
 
 exports.insert = (collection, data) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(() => {
-                const ref = db.ref(collection).push();
-                data['_id'] = ref.key;
-                ref.set(data)
-                .then(ref => {
-                    resolve(ref);
+            let process = async () => {
+                exports.db.ready(() => {
+                    const ref = exports.db.ref(collection).push();
+                    data['_id'] = ref.key;
+                    ref.set(data)
+                    .then(ref => {
+                        resolve(ref);
+                    });
                 });
-            });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -40,15 +47,22 @@ exports.insert = (collection, data) => {
 };
 
 exports.findAll = (collection) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(() => {
-                db.query(collection)
-                .sort('date', true)
-                .get(snapshot => {
-                    resolve(snapshot.getValues());
+            let process = async () => {
+                exports.db.ready(() => {
+                    exports.db.query(collection)
+                    .sort('date', true)
+                    .get(snapshot => {
+                        resolve(snapshot.getValues());
+                    });
                 });
-            });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -56,20 +70,27 @@ exports.findAll = (collection) => {
 };
 
 exports.find = (collection, filter1, filter2, filter3) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(() => {
-                db.query(collection)
-                .filter(filter1, filter2, filter3)
-                .get(snapshot => {
-                    let dataset = snapshot.getValues();
-                    if (dataset.length > 0) {
-                        resolve(dataset[0]);
-                    } else {
-                        resolve(null);
-                    }
+            let process = async () => {
+                exports.db.ready(() => {
+                    exports.db.query(collection)
+                    .filter(filter1, filter2, filter3)
+                    .get(snapshot => {
+                        let dataset = snapshot.getValues();
+                        if (dataset.length > 0) {
+                            resolve(dataset[0]);
+                        } else {
+                            resolve(null);
+                        }
+                    });
                 });
-            });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -77,18 +98,25 @@ exports.find = (collection, filter1, filter2, filter3) => {
 };
 
 exports.oldest = (collection) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(() => {
-                db.query(collection)
-                .sort('date', true)
-                .take(1)
-                .get(snapshots => {
-                    let query = snapshots.getValues();
-                    query = query.length > 0 ? query[0] : null;
-                    resolve(query)
+            let process = async () => {
+                exports.db.ready(() => {
+                    exports.db.query(collection)
+                    .sort('date', true)
+                    .take(1)
+                    .get(snapshots => {
+                        let query = snapshots.getValues();
+                        query = query.length > 0 ? query[0] : null;
+                        resolve(query)
+                    });
                 });
-            });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -96,15 +124,44 @@ exports.oldest = (collection) => {
 };
 
 exports.remove = (collection, id) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(() => {
-                db.query(collection)
-                .filter('_id', '==', id)
-                .remove(ref => {
-                    resolve(ref.length)
+            let process = async () => {
+                exports.db.ready(() => {
+                    exports.db.query(collection)
+                    .filter('_id', '==', id)
+                    .remove(ref => {
+                        resolve(ref.length)
+                    });
                 });
-            });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+exports.removeAll = (collection) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let process = async () => {
+                exports.db.ready(() => {
+                    exports.db.query(collection)
+                    .remove(ref => {
+                        resolve(ref.length)
+                    });
+                });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -112,12 +169,19 @@ exports.remove = (collection, id) => {
 };
 
 exports.update = (collection, id, data) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(async () => {
-                const dataRef = await db.ref(`${collection}/${id}`).update(data);
-                resolve();
-            });
+            let process = async () => {
+                exports.db.ready(async () => {
+                    const dataRef = await exports.db.ref(`${collection}/${id}`).update(data);
+                    resolve();
+                });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -136,28 +200,35 @@ exports.list = async (name) => {
 };
 
 exports.pick = async (name) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(() => {
-                db.query(name)
-                .filter('picked', '!=', true)
-                .sort('date', true)
-                .take(1)
-                .get(async snapshots => {
-                    let now = new Date();
-                    let tasks = snapshots.getValues();
-                    task = tasks.length > 0 ? tasks[0] : null;
-                    if (task) {
-                        task.history.push({
-                            date: now,
-                            name: 'picked'
-                        });
-                        task.picked = true;
-                        await exports.update(name, task._id, task);
-                    }
-                    resolve(task)
+            let process = async () => {
+                exports.db.ready(() => {
+                    exports.db.query(name)
+                    .filter('picked', '!=', true)
+                    .sort('date', true)
+                    .take(1)
+                    .get(async snapshots => {
+                        let now = new Date();
+                        let tasks = snapshots.getValues();
+                        task = tasks.length > 0 ? tasks[0] : null;
+                        if (task) {
+                            task.history.push({
+                                date: now,
+                                name: 'picked'
+                            });
+                            task.picked = true;
+                            await exports.update(name, task._id, task);
+                        }
+                        resolve(task)
+                    });
                 });
-            });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -165,50 +236,57 @@ exports.pick = async (name) => {
 };
 
 exports.rearm = async (name, id = '') => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(() => {
-                if (id == '') {
-                    log("Rearmando todas as tarefas");
-                    db.query(name)
-                    .filter('picked', '==', true)
-                    .get(async snapshots => {
-                        let now = new Date();
-                        let tasks = snapshots.getValues();
-                        await tasks.forEachAsync(async task => {
-                            log(`    Tarefa ${task._id}`);
-                            task.history.push({
-                                date: now,
-                                name: 'rearm'
+            let process = async () => {
+                exports.db.ready(() => {
+                    if (id == '') {
+                        log("Rearmando todas as tarefas");
+                        exports.db.query(name)
+                        .filter('picked', '==', true)
+                        .get(async snapshots => {
+                            let now = new Date();
+                            let tasks = snapshots.getValues();
+                            await tasks.forEachAsync(async task => {
+                                log(`    Tarefa ${task._id}`);
+                                task.history.push({
+                                    date: now,
+                                    name: 'rearm'
+                                });
+                                task.picked = false;
+                                task.date = new Date();
+                                await exports.update(name, task._id, task);
+                                log(`        Tarefa rearmada`);
                             });
-                            task.picked = false;
-                            task.date = new Date();
-                            await exports.update(name, task._id, task);
-                            log(`        Tarefa rearmada`);
+                            resolve(tasks);
                         });
-                        resolve(tasks);
-                    });
-                } else {
-                    log(`Rearmando a tarefa ${id}`);
-                    db.query(name)
-                    .filter('_id', '==', id)
-                    .get(async snapshots => {
-                        let now = new Date();
-                        let tasks = snapshots.getValues();
-                        await tasks.forEachAsync(async task => {
-                            task.history.push({
-                                date: now,
-                                name: 'rearm'
+                    } else {
+                        log(`Rearmando a tarefa ${id}`);
+                        exports.db.query(name)
+                        .filter('_id', '==', id)
+                        .get(async snapshots => {
+                            let now = new Date();
+                            let tasks = snapshots.getValues();
+                            await tasks.forEachAsync(async task => {
+                                task.history.push({
+                                    date: now,
+                                    name: 'rearm'
+                                });
+                                task.picked = false;
+                                task.date = new Date();
+                                await exports.update(name, task._id, task);
+                                log(`    Tarefa rearmada`);
                             });
-                            task.picked = false;
-                            task.date = new Date();
-                            await exports.update(name, task._id, task);
-                            log(`    Tarefa rearmada`);
+                            resolve(tasks);
                         });
-                        resolve(tasks);
-                    });
-                }
-            });
+                    }
+                });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -216,25 +294,32 @@ exports.rearm = async (name, id = '') => {
 };
 
 exports.close = (name, id) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(() => {
-                db.query(name)
-                .filter('_id', '==', id)
-                .get(async snapshots => {
-                    let now = new Date();
-                    let tasks = snapshots.getValues();
-                    task = tasks.length > 0 ? tasks[0] : null;
-                    if (task) {
-                        task.history.push({
-                            date: now,
-                            name: 'closed'
-                        });
-                        await exports.remove(name, task._id);
-                    };
-                    resolve(task)
+            let process = async () => {
+                exports.db.ready(() => {
+                    exports.db.query(name)
+                    .filter('_id', '==', id)
+                    .get(async snapshots => {
+                        let now = new Date();
+                        let tasks = snapshots.getValues();
+                        task = tasks.length > 0 ? tasks[0] : null;
+                        if (task) {
+                            task.history.push({
+                                date: now,
+                                name: 'closed'
+                            });
+                            await exports.remove(name, task._id);
+                        };
+                        resolve(task)
+                    });
                 });
-            });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -278,17 +363,25 @@ exports.queues = (all = false, details = false) => {
         });
         return refs;
     }
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            db.ready(() => {
-                db.query('')
-                .get(async snapshot => {
-                    let refs = JSON.parse(JSON.stringify(snapshot.map(item => item.ref.path), null, 4));
-                    if (!all) refs = refs.filter(item => item.indexOf('_hist') !== (item.length - 5));
-                    if (details) refs = await mountDetails(refs);
-                    resolve(refs);
+            let process = async () => {
+                exports.db.ready(() => {
+                    exports.db.query('')
+                    .get(async snapshot => {
+                        let refs = JSON.parse(JSON.stringify(snapshot.map(item => item.ref.path), null, 4));
+                        refs = refs.filter(item => item !== 'config');
+                        if (!all) refs = refs.filter(item => item.indexOf('_hist') !== (item.length - 5));
+                        if (details) refs = await mountDetails(refs);
+                        resolve(refs);
+                    });
                 });
-            });
+            }
+            if (exports.db) {
+                await process()
+            } else {
+                setTimeout(process, 10);
+            }
         } catch (e) {
             reject(e);
         }
@@ -303,6 +396,15 @@ exports.clearHistory = async (name) => {
         let item = history.shift();
         await project.remove(`${name}_hist`, item._id);
     }
+}
+
+exports.setConfig = async (name, config) => {
+    await exports.insert(`config/${name}`, config);
+}
+
+exports.getConfig = async (name) => {
+    let teste = await exports.findAll(`config/${name}`);
+    return teste.length > 0 ? teste[0] : null;
 }
 
 exports.process = async (name, callback, debug=false) => {

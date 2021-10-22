@@ -85,15 +85,26 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //     console.log(task);
         // });
 
-        //////////////////////////////////////////////////////
-        /// APAGAR HISTORICO
-
-        // let r_remove = await project.remove('fila_teste_hist', 'kushjtka000eys9g2dsvzy1a');
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // console.log("///// APAGAR REGISTRO")
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // // let r_remove = await project.remove('config', 'kv2ly6kw0007ow9gyv1rovhf');
+        // let r_remove = await project.removeAll('config');
 
         //////////////////////////////////////////////////////
         /// LISTAR HISTORICO
 
         // let tasks = await project.list('fila_teste_hist');
+        // await tasks.forEachAsync(task => {
+        //     console.log("")
+        //     console.log(task);
+        // });
+
+
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // console.log("///// DETALHE LISTA")
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // let tasks = await project.findAll('config');
         // await tasks.forEachAsync(task => {
         //     console.log("")
         //     console.log(task);
@@ -113,30 +124,51 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //////////////////////////////////////////////////////
         /// LISTAR FILAS
 
-        await project.clearHistory('fila_teste');
+        // await project.clearHistory('fila_teste');
 
         console.log("//////////////////////////////////////////////////////////////////");
         console.log("///// LISTAR FILAS")
         console.log("//////////////////////////////////////////////////////////////////");
-        let queues = await project.queues();
+        let queues = await project.queues(true);
         await queues.forEachAsync(item => {
             console.log(item);
         });
         console.log("");
 
-        console.log("//////////////////////////////////////////////////////////////////");
-        console.log("///// LISTAR TODAS AS FILAS")
-        console.log("//////////////////////////////////////////////////////////////////");
-        let allQueues = await project.queues(true);
-        await allQueues.forEachAsync(item => {
-            console.log(item);
-        });
-        console.log("");
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // console.log("///// LISTAR TODAS AS FILAS")
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // let allQueues = await project.queues(true);
+        // await allQueues.forEachAsync(item => {
+        //     console.log(item);
+        // });
+        // console.log("");
+
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // console.log("///// LISTAR FILAS COM RESUMO")
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // let detailQueues = await project.queues(false, true);
+        // await tools.debug(JSON.stringify(detailQueues, null, 4));
+
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // console.log("///// SETAR CONFIGURACAO")
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // await project.setConfig('email_teste', {
+        //     url: 'smtplw.com.br',
+        //     port: 587,
+        //     acc: 'ribeirocontabilidade',
+        //     pass: 'CzFKLRfs6097',
+        //     email: 'notificacaoiacon@somacontabilidades.com.br',
+        //     imap: 'mail.exchange.locaweb.com.br',
+        //     imap_port: '993',
+        //     email_pass: 'soma@202010',
+        //     imap_folder: '"/Mensagens enviadas"'
+        // });
 
         console.log("//////////////////////////////////////////////////////////////////");
-        console.log("///// LISTAR FILAS COM RESUMO")
+        console.log("///// BUSCAR CONFIGURACAO")
         console.log("//////////////////////////////////////////////////////////////////");
-        let detailQueues = await project.queues(false, true);
-        await tools.debug(JSON.stringify(detailQueues, null, 4));
+        let config = await project.getConfig('email_teste');
+        tools.debug(config);
     }
 })();
