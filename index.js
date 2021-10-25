@@ -481,11 +481,10 @@ exports.process = async (name, callback, debug=false) => {
                     }
                 };
             } else {
-                console.log("[ALERT] Não foi informado um callback para a tarefa. Sem isso a tarefa não será fechada.");
+                log("[ALERT] Não foi informado um callback para a tarefa. Sem isso a tarefa não será fechada.");
                 return '';
             }
         } else {
-            console.log("Nenhuma tarefa encontrada");
             return "Nenhuma tarefa encontrada";
         }
     } catch (e) {
