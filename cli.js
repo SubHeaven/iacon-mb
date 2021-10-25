@@ -26,14 +26,14 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //////////////////////////////////////////////////////
         /// PROCESSAR UMA TAREFA
 
-        // let log = await project.process('fila_teste', async (payload, task) => {
-        //     console.log("Processando a task:");
-        //     console.log(task);
-        //     console.log('payload');
-        //     console.log(payload);
-        //     task.oioioi();
-        //     console.log("Task processada");
-        // }, debug=true);
+        let log = await project.process('fila_teste', async (payload, task) => {
+            console.log("Processando a task:");
+            console.log(task);
+            console.log('payload');
+            console.log(payload);
+            // task.oioioi();
+            console.log("Task processada");
+        }, debug=true);
 
         //////////////////////////////////////////////////////
         /// APAGAR TAREFA
@@ -126,14 +126,14 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
 
         // await project.clearHistory('fila_teste');
 
-        console.log("//////////////////////////////////////////////////////////////////");
-        console.log("///// LISTAR FILAS")
-        console.log("//////////////////////////////////////////////////////////////////");
-        let queues = await project.queues(true);
-        await queues.forEachAsync(item => {
-            console.log(item);
-        });
-        console.log("");
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // console.log("///// LISTAR FILAS")
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // let queues = await project.queues(true);
+        // await queues.forEachAsync(item => {
+        //     console.log(item);
+        // });
+        // console.log("");
 
         // console.log("//////////////////////////////////////////////////////////////////");
         // console.log("///// LISTAR TODAS AS FILAS")
@@ -165,10 +165,10 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //     imap_folder: '"/Mensagens enviadas"'
         // });
 
-        console.log("//////////////////////////////////////////////////////////////////");
-        console.log("///// BUSCAR CONFIGURACAO")
-        console.log("//////////////////////////////////////////////////////////////////");
-        let config = await project.getConfig('email_teste');
-        tools.debug(config);
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // console.log("///// BUSCAR CONFIGURACAO")
+        // console.log("//////////////////////////////////////////////////////////////////");
+        // let config = await project.getConfig('email_teste');
+        // tools.debug(config);
     }
 })();
