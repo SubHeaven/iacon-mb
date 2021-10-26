@@ -26,14 +26,14 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         //////////////////////////////////////////////////////
         /// PROCESSAR UMA TAREFA
 
-        let log = await project.process('fila_teste', async (payload, task) => {
-            console.log("Processando a task:");
-            console.log(task);
-            console.log('payload');
-            console.log(payload);
-            // task.oioioi();
-            console.log("Task processada");
-        }, debug=true);
+        // let log = await project.process('fila_teste', async (payload, task) => {
+        //     console.log("Processando a task:");
+        //     console.log(task);
+        //     console.log('payload');
+        //     console.log(payload);
+        //     // task.oioioi();
+        //     console.log("Task processada");
+        // }, debug=true);
 
         //////////////////////////////////////////////////////
         /// APAGAR TAREFA
@@ -150,25 +150,41 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         // let detailQueues = await project.queues(false, true);
         // await tools.debug(JSON.stringify(detailQueues, null, 4));
 
-        // console.log("//////////////////////////////////////////////////////////////////");
-        // console.log("///// SETAR CONFIGURACAO")
-        // console.log("//////////////////////////////////////////////////////////////////");
-        // await project.setConfig('email_teste', {
-        //     url: 'smtplw.com.br',
-        //     port: 587,
-        //     acc: 'ribeirocontabilidade',
-        //     pass: 'CzFKLRfs6097',
-        //     email: 'notificacaoiacon@somacontabilidades.com.br',
-        //     imap: 'mail.exchange.locaweb.com.br',
-        //     imap_port: '993',
-        //     email_pass: 'soma@202010',
-        //     imap_folder: '"/Mensagens enviadas"'
-        // });
+        let setar_configuracao = async () => {
+            console.log("//////////////////////////////////////////////////////////////////");
+            console.log("///// SETAR CONFIGURACAO")
+            console.log("//////////////////////////////////////////////////////////////////");
+            await project.setConfig('email_teste', {
+                url: 'smtplw.com.br',
+                port: 587,
+                acc: 'ribeirocontabilidade',
+                pass: 'CzFKLRfs6097',
+                email: 'notificacaoiacon@somacontabilidades.com.br',
+                imap: 'mail.exchange.locaweb.com.br',
+                imap_port: '993',
+                email_pass: 'soma@202010',
+                imap_folder: '"/Mensagens enviadas"'
+            });
+        }
 
-        // console.log("//////////////////////////////////////////////////////////////////");
-        // console.log("///// BUSCAR CONFIGURACAO")
-        // console.log("//////////////////////////////////////////////////////////////////");
-        // let config = await project.getConfig('email_teste');
-        // tools.debug(config);
+        let remover_configuracao = async () => {
+            console.log("//////////////////////////////////////////////////////////////////");
+            console.log("///// APAGAR CONFIGURACAO")
+            console.log("//////////////////////////////////////////////////////////////////");
+            let config = await project.removeConfig('email_teste');
+            tools.debug(config);
+        }
+
+        let mostrar_configuracao = async () => {
+            console.log("//////////////////////////////////////////////////////////////////");
+            console.log("///// BUSCAR CONFIGURACAO")
+            console.log("//////////////////////////////////////////////////////////////////");
+            let config = await project.getConfig('email_teste');
+            tools.debug(config);
+        }
+
+        // await remover_configuracao();
+        await setar_configuracao();
+        await mostrar_configuracao();
     }
 })();

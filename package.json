@@ -1,6 +1,6 @@
 {
     "name": "iacon-mb",
-    "version": "0.0.5",
+    "version": "0.0.7",
     "description": "A simple npm cli/tool project",
     "main": "index.js",
     "scripts": {
