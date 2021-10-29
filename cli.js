@@ -6,11 +6,14 @@ argParse.init("subheaven-npm-base", "Cumprimenta alguém");
 argParse.positional("name", "Nome a ser cumprimentado", { required: false, default: "", sample: "SubHeaven" });
 (async() => {
     if (argParse.validate()) {
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        /// ADICIONAR TAREFA
+        const addTarefa = async () => {
+            console.log("//////////////////////////////////////////////////////////////////");
+            console.log("///// ADICIONAR TAREFAS")
+            console.log("//////////////////////////////////////////////////////////////////");
 
-        // let key = await project.add('fila_teste', { message: "Olá SubHeaven 1" });
-        // console.log(key);
+            let key = await project.add('fila_teste', { message: "Olá SubHeaven 1" });
+            console.log(key);
+        }
 
         // await project.add('fila_teste', { message: "Olá SubHeaven 2" });
         // await project.add('fila_teste', { message: "Olá SubHeaven 3" });
@@ -61,17 +64,16 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         // };
         // await project.update('fila_teste', 'kuyb17hw0000l09ghgsc9n4p', debug);
 
-        //////////////////////////////////////////////////////
-        /// LISTAR TAREFAS
-
-        // console.log("//////////////////////////////////////////////////////////////////");
-        // console.log("///// LISTAR TAREFAS")
-        // console.log("//////////////////////////////////////////////////////////////////");
-        // let tasks = await project.list('fila_teste');
-        // await tasks.forEachAsync(task => {
-        //     console.log("");
-        //     console.log(task);
-        // });
+        // const listarTarefas = async () => {
+        //     console.log("//////////////////////////////////////////////////////////////////");
+        //     console.log("///// LISTAR TAREFAS")
+        //     console.log("//////////////////////////////////////////////////////////////////");
+        //     let tasks = await project.list('fila_teste');
+        //     await tasks.forEachAsync(task => {
+        //         console.log("");
+        //         console.log(task);
+        //     });
+        // }
 
         //////////////////////////////////////////////////////
         /// LISTAR HISTORICO
@@ -150,7 +152,7 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         // let detailQueues = await project.queues(false, true);
         // await tools.debug(JSON.stringify(detailQueues, null, 4));
 
-        let setar_configuracao = async () => {
+        let setarConfiguracao = async () => {
             console.log("//////////////////////////////////////////////////////////////////");
             console.log("///// SETAR CONFIGURACAO")
             console.log("//////////////////////////////////////////////////////////////////");
@@ -158,16 +160,16 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
                 url: 'smtplw.com.br',
                 port: 587,
                 acc: 'ribeirocontabilidade',
-                pass: 'CzFKLRfs6097',
+                pass: '',
                 email: 'notificacaoiacon@somacontabilidades.com.br',
                 imap: 'mail.exchange.locaweb.com.br',
                 imap_port: '993',
-                email_pass: 'soma@202010',
+                email_pass: '',
                 imap_folder: '"/Mensagens enviadas"'
             });
         }
 
-        let remover_configuracao = async () => {
+        let removerConfiguracao = async () => {
             console.log("//////////////////////////////////////////////////////////////////");
             console.log("///// APAGAR CONFIGURACAO")
             console.log("//////////////////////////////////////////////////////////////////");
@@ -175,7 +177,7 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
             tools.debug(config);
         }
 
-        let mostrar_configuracao = async () => {
+        let mostrarConfiguracao = async () => {
             console.log("//////////////////////////////////////////////////////////////////");
             console.log("///// BUSCAR CONFIGURACAO")
             console.log("//////////////////////////////////////////////////////////////////");
@@ -183,8 +185,10 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
             tools.debug(config);
         }
 
-        // await remover_configuracao();
-        await setar_configuracao();
-        await mostrar_configuracao();
+        // await setarConfiguracao();
+        // await removerConfiguracao();
+        await mostrarConfiguracao();
+        // await addTarefa();
+        // await listarTarefas();
     }
 })();

@@ -398,40 +398,6 @@ exports.clearHistory = async (name) => {
     }
 }
 
-exports.updateConfig = (name, data) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(async () => {
-                    await tools.debug(data)
-                    const dataRef = await exports.db.ref(`config/${name}`).update(data)
-                    .then(async ref => {
-                        await tools.debug("THEN")
-                        await tools.debug(ref);
-                        return ref;
-                    })
-                    .catch(async err => {
-                        await tools.debug("CATCH")
-                        await tools.debug(err);
-                    });
-                    tools.debug(name);
-                    await exports.db.ref(`config/${name}/pass`).update('AAAAAAA');
-                    await tools.debug(dataRef)
-                    resolve();
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            console.log(e);
-            reject(e);
-        }
-    });
-}
-
 exports.setConfig = async (name, config) => {
     await exports.removeConfig(name);
     await exports.insert(`config/${name}`, config);
@@ -440,7 +406,6 @@ exports.setConfig = async (name, config) => {
 
 exports.getConfig = async (name) => {
     let teste = await exports.findAll(`config/${name}`);
-    await tools.debug(teste);
     return teste.length > 0 ? teste[0] : null;
 }
 
