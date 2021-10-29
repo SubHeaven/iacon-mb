@@ -157,13 +157,13 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
             console.log("///// SETAR CONFIGURACAO")
             console.log("//////////////////////////////////////////////////////////////////");
             await project.setConfig('email_teste', {
-                url: 'smtplw.com.br',
-                port: 587,
-                acc: 'ribeirocontabilidade',
+                url: '',
+                port: ,
+                acc: '',
                 pass: '',
-                email: 'notificacaoiacon@somacontabilidades.com.br',
-                imap: 'mail.exchange.locaweb.com.br',
-                imap_port: '993',
+                email: '',
+                imap: '',
+                imap_port: '',
                 email_pass: '',
                 imap_folder: '"/Mensagens enviadas"'
             });
