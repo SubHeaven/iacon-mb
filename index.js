@@ -1,12 +1,6 @@
 const database = require('subheaven-local-db')('fila_teste');
-const env = require('subheaven-env');
 const log = require('debug')('iacon-mb:index');
 const tools = require('subheaven-tools');
-
-env.addParams([
-    { name: 'DBPATH', description: 'Caminho da pasta do banco de dados', required: true, sample: './db' },
-    { name: 'DBNAME', description: 'Nome do banco de dados', required: true, sample: 'iacon' }
-]);
 
 exports.add = async (collection, payload) => {
     let newone = {

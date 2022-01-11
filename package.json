@@ -1,6 +1,6 @@
 {
     "name": "iacon-mb",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Gerenciador de fila de tarefas",
     "main": "index.js",
     "scripts": {
@@ -24,7 +24,6 @@
     "homepage": "https://github.com/SubHeaven/iacon-mb#readme",
     "dependencies": {
         "subheaven-arg": "^0.2.6",
-        "subheaven-env": "^0.1.2",
         "subheaven-local-db": "^0.1.2",
         "subheaven-tools": "^0.1.13"
     }
