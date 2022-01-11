@@ -1,296 +1,80 @@
-const fs = require('fs');
+const database = require('subheaven-local-db')('fila_teste');
 const env = require('subheaven-env');
-const tools = require('subheaven-tools');
 const log = require('debug')('iacon-mb:index');
+const tools = require('subheaven-tools');
 
 env.addParams([
     { name: 'DBPATH', description: 'Caminho da pasta do banco de dados', required: true, sample: './db' },
     { name: 'DBNAME', description: 'Nome do banco de dados', required: true, sample: 'iacon' }
 ]);
-(async() => {
-    await env.config();
 
-    if (!fs.existsSync(process.env.DBPATH)) {
-        log(process.env)
-        fs.mkdirSync(process.env.DBPATH);
+exports.add = async (collection, payload) => {
+    let newone = {
+        payload: payload,
+        date: new Date(),
+        picked: false,
+        tryout: 0,
+        history: [
+            {
+                date: new Date(),
+                name: 'added'
+            }
+        ]
     }
-
-    exports.ready = false;
-    
-    const { AceBase } = require('acebase');
-    const options = { info: '', logLevel: 'error', storage: { path: process.env.DBPATH } };
-    exports.db = new AceBase(process.env.DBNAME, options);
-})();
-
-exports.insert = (collection, data) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(() => {
-                    const ref = exports.db.ref(collection).push();
-                    data['_id'] = ref.key;
-                    ref.set(data)
-                    .then(ref => {
-                        resolve(ref);
-                    });
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            reject(e);
-        }
-    });
+    let d = await database.insert(collection, newone);
+    return d._id;
 };
 
-exports.findAll = (collection) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(() => {
-                    exports.db.query(collection)
-                    .sort('date', true)
-                    .get(snapshot => {
-                        resolve(snapshot.getValues());
-                    });
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            reject(e);
-        }
-    });
-};
-
-exports.find = (collection, filter1, filter2, filter3) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(() => {
-                    exports.db.query(collection)
-                    .filter(filter1, filter2, filter3)
-                    .get(snapshot => {
-                        let dataset = snapshot.getValues();
-                        if (dataset.length > 0) {
-                            resolve(dataset[0]);
-                        } else {
-                            resolve(null);
-                        }
-                    });
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            reject(e);
-        }
-    });
-};
-
-exports.oldest = (collection) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(() => {
-                    exports.db.query(collection)
-                    .sort('date', true)
-                    .take(1)
-                    .get(snapshots => {
-                        let query = snapshots.getValues();
-                        query = query.length > 0 ? query[0] : null;
-                        resolve(query)
-                    });
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            reject(e);
-        }
-    });
-};
-
-exports.remove = (collection, id) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(() => {
-                    exports.db.query(collection)
-                    .filter('_id', '==', id)
-                    .remove(ref => {
-                        resolve(ref.length)
-                    });
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            reject(e);
-        }
-    });
-};
-
-exports.removeAll = (collection) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(() => {
-                    exports.db.query(collection)
-                    .remove(ref => {
-                        resolve(ref.length)
-                    });
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            reject(e);
-        }
-    });
-};
-
-exports.update = (collection, id, data) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(async () => {
-                    const dataRef = await exports.db.ref(`${collection}/${id}`).update(data);
-                    resolve();
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            reject(e);
-        }
-    });
-}
-
-exports.add = async (name, payload) => {
-    let now = new Date();
-    let d = await exports.insert(name, { payload: payload, date: now, picked: false, tryout: 0, history: [ { date:  now, name: 'added' } ] });
-    return d.key;
-};
-
-exports.list = async (name) => {
-    let tasks = await exports.findAll(name);
+exports.list = async (collection, query=null) => {
+    let tasks = await database.find(collection, query);
     return tasks.map(item => item);
 };
 
-exports.pick = async (name) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(() => {
-                    exports.db.query(name)
-                    .filter('picked', '!=', true)
-                    .sort('date', true)
-                    .take(1)
-                    .get(async snapshots => {
-                        let now = new Date();
-                        let tasks = snapshots.getValues();
-                        task = tasks.length > 0 ? tasks[0] : null;
-                        if (task) {
-                            task.history.push({
-                                date: now,
-                                name: 'picked'
-                            });
-                            task.picked = true;
-                            await exports.update(name, task._id, task);
-                        }
-                        resolve(task)
-                    });
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            reject(e);
+exports.oldest = async (collection) => {
+    let tasks = await database.find(collection, { picked: false })
+    tasks = tasks.sort((a, b) => {
+        if (a.date < b.date) {
+            return -1;
         }
+        if (a.date > b.date) {
+            return 1;
+        }
+        return 0;
+    });
+    return tasks.length > 0 ? tasks[0] : null;
+};
+
+exports.delete = async (collection, query) => {
+    await database.delete(collection, query);
+};
+
+exports.deleteAll = async (collection) => {
+    let tasks = await exports.list(collection);
+    await tasks.forEachAsync(async item => {
+        await exports.delete(collection, { _id: item._id })
     });
 };
 
-exports.rearm = async (name, id = '') => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let process = async () => {
-                exports.db.ready(() => {
-                    if (id == '') {
-                        log("Rearmando todas as tarefas");
-                        exports.db.query(name)
-                        .filter('picked', '==', true)
-                        .get(async snapshots => {
-                            let now = new Date();
-                            let tasks = snapshots.getValues();
-                            await tasks.forEachAsync(async task => {
-                                log(`    Tarefa ${task._id}`);
-                                task.history.push({
-                                    date: now,
-                                    name: 'rearm'
-                                });
-                                task.picked = false;
-                                task.date = new Date();
-                                await exports.update(name, task._id, task);
-                                log(`        Tarefa rearmada`);
-                            });
-                            resolve(tasks);
-                        });
-                    } else {
-                        log(`Rearmando a tarefa ${id}`);
-                        exports.db.query(name)
-                        .filter('_id', '==', id)
-                        .get(async snapshots => {
-                            let now = new Date();
-                            let tasks = snapshots.getValues();
-                            await tasks.forEachAsync(async task => {
-                                task.history.push({
-                                    date: now,
-                                    name: 'rearm'
-                                });
-                                task.picked = false;
-                                task.date = new Date();
-                                await exports.update(name, task._id, task);
-                                log(`    Tarefa rearmada`);
-                            });
-                            resolve(tasks);
-                        });
-                    }
-                });
-            }
-            if (exports.db) {
-                await process()
-            } else {
-                setTimeout(process, 10);
-            }
-        } catch (e) {
-            reject(e);
-        }
+exports.pick = async (collection) => {
+    let task = await exports.oldest(collection);
+    if (task !== null) {
+        task.picked = true;
+        task.history.push({
+            date: new Date(),
+            name: 'picked'
+        });
+        await database.update(collection, { _id: task._id }, task);
+    }
+    return task;
+};
+
+exports.rearm = async (collection, task) => {
+    task.picked = false;
+    task.history.push({
+        date: new Date(),
+        name: 'rearm'
     });
+    await database.update(collection, { _id: task._id }, task);
 };
 
 exports.close = (name, id) => {
@@ -309,7 +93,7 @@ exports.close = (name, id) => {
                                 date: now,
                                 name: 'closed'
                             });
-                            await exports.remove(name, task._id);
+                            await database.database(name, task._id);
                         };
                         resolve(task)
                     });
@@ -333,7 +117,7 @@ exports.queueDetail = async (name) => {
         pendentes: [],
         history: []
     };
-    let tasks = await exports.findAll(name);
+    let tasks = await database.find(name);
     await tasks.forEachAsync(item => {
         if (item.tryout > 0) {
             detail.erros.push({
@@ -351,7 +135,7 @@ exports.queueDetail = async (name) => {
             });
         }
     });
-    detail.history = await exports.findAll(`${name}_hist`);
+    detail.history = await database.find(`${name}_hist`);
     detail.history = JSON.parse(JSON.stringify(detail.history));
     return detail;
 }
@@ -390,25 +174,24 @@ exports.queues = (all = false, details = false) => {
 
 exports.clearHistory = async (name) => {
     const h_size = 100;
-    let history = await exports.findAll(`${name}_hist`);
+    let history = await database.find(`${name}_hist`);
 
     while (history.length > h_size) {
         let item = history.shift();
-        await project.remove(`${name}_hist`, item._id);
+        await database.remove(`${name}_hist`, item._id);
     }
 }
 
 exports.setConfig = async (name, config) => {
     await exports.removeConfig(name);
-    await exports.insert(`config/${name}`, config);
+    await database.insert(`config`, config);
     return 0
 }
 
 exports.getConfig = async (name) => {
-    let teste = await exports.findAll(`config/${name}`);
+    let teste = await database.find(`config`);
     return teste.length > 0 ? teste[0] : null;
 }
-
 
 exports.removeConfig = (name) => {
     return new Promise(async (resolve, reject) => {
@@ -449,8 +232,8 @@ exports.process = async (name, callback, debug=false) => {
             if (callback) {
                 if (task) {
                     local_log("");
-                    log(`Executando processo = ${task._id}`);
-                    local_log(`Executando processo = ${task._id}`);
+                    log(`${await tools.now()} Executando processo = ${task._id}`);
+                    local_log(`${await tools.now()} Executando processo = ${task._id}`);
                     const _oldlog = console.log;
                     const _olderror = console.error;
                     task.log = "";
@@ -463,9 +246,10 @@ exports.process = async (name, callback, debug=false) => {
                         }
                     }
                     try {
+                        task.tryout = task.tryout + 1;
                         await callback(payload, task);
-                        log("Processo executado com sucesso:");
-                        _oldlog("Processo executado com sucesso:");
+                        log(`${await tools.now()} Processo executado com sucesso:`);
+                        _oldlog(`${await tools.now()} Processo executado com sucesso:`);
                         log("");
                         log(_log);
                         log("");
@@ -473,31 +257,41 @@ exports.process = async (name, callback, debug=false) => {
                         let now = new Date();
                         task.history.push({
                             date: now,
-                            name: 'processed'
+                            name: 'processed',
+                            log: _log
                         });
-                        await exports.insert(`${name}_hist`, {
+                        await database.insert(`${name}_hist`, {
                             log: _log,
                             payload: payload,
+                            tryout: task.tryout,
                             date: now,
                             history: task.history
                         });
+                        await database.delete(name, { _id: task._id });
                         log("Finalizando processo.");
-                        await exports.remove(name, task._id);
-                        await exports.clearHistory(name);
                     } catch (ex) {
-                        log("Erro ao executar processo:");
-                        _oldlog("Erro ao executar processo:");
+                        console.log = _oldlog;
+                        console.error = _olderror;
+                        log(`${await tools.now()} Erro ao executar processo:`);
+                        console.log(`${await tools.now()} Erro ao executar processo:`);
 
                         let stk = new Error().stack;
                         stk = stk.split('\n').splice(2, stk.split('\n').length);
                         _log = `${_log}\n${ex.toString()}\n${stk.join('\n')}\n`;
                         log(_log);
-                        _oldlog(_log);
+                        console.log(_log);
 
                         task.log = _log;
-                        task.tryout = task.tryout + 1;
-                        await exports.update(name, task._id, task);
-                        await exports.rearm(name, task._id);
+                        let now = new Date();
+
+                        task.history.push({
+                            date: now,
+                            name: 'error',
+                            log: _log
+                        });
+
+                        await database.update(name, { _id: task._id }, task);
+                        await exports.rearm(name, task);
                     } finally {
                         console.log = _oldlog;
                         console.error = _olderror;

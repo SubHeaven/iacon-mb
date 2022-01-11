@@ -1,7 +1,7 @@
 {
     "name": "iacon-mb",
-    "version": "0.0.7",
-    "description": "A simple npm cli/tool project",
+    "version": "0.0.1",
+    "description": "Gerenciador de fila de tarefas",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,10 +23,9 @@
     },
     "homepage": "https://github.com/SubHeaven/iacon-mb#readme",
     "dependencies": {
-        "acebase": "^1.8.2",
-        "debug": "^4.3.1",
-        "subheaven-arg": "github:SubHeaven/subheaven-arg",
-        "subheaven-env": "github:SubHeaven/subheaven-env",
-        "subheaven-tools": "github:SubHeaven/subheaven-tools"
+        "subheaven-arg": "^0.2.6",
+        "subheaven-env": "^0.1.2",
+        "subheaven-local-db": "^0.1.2",
+        "subheaven-tools": "^0.1.13"
     }
 }
