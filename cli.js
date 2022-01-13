@@ -1,4 +1,4 @@
-const project = require('./index.js');
+const project = require('./index.js')('iacon-mb');
 const argParse = require('subheaven-arg');
 const tools = require('subheaven-tools');
 
