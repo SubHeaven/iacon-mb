@@ -26,6 +26,15 @@ class IaconBroker {
 
     list = async (collection, query=null) => {
         let tasks = await this.database.find(collection, query);
+        tasks = tasks.sort((a, b) => {
+            if (a.date < b.date) {
+                return -1;
+            }
+            if (a.date > b.date) {
+                return 1;
+            }
+            return 0;
+        });
         return tasks.map(item => item);
     };
 
@@ -154,10 +163,10 @@ class IaconBroker {
                             console.log(_log);
 
                             task.log = _log;
-                            let now = new Date();
+                            task.date = new Date();
 
                             task.history.push({
-                                date: now,
+                                date: task.date,
                                 name: 'error',
                                 log: _log
                             });
