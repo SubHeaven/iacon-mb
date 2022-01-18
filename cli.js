@@ -2,10 +2,102 @@ const project = require('./index.js')('iacon-mb');
 const argParse = require('subheaven-arg');
 const tools = require('subheaven-tools');
 
-argParse.init("subheaven-npm-base", "Cumprimenta alguém");
+argParse.init("iacon-mb", "Cumprimenta alguém");
 argParse.positional("name", "Nome a ser cumprimentado", { required: false, default: "", sample: "SubHeaven" });
+argParse.named("add-one", "Adiciona uma tarefa com uma mensagem específica", { required: false, default: "", sample: "Olá Mundo!" });
+argParse.boolean("list", "Lista as tarefas pendentes", { solo: true });
+argParse.boolean("hist", "Lista o histórico de tarefas executadas", { solo: true });
+argParse.boolean("add", "Adiciona 10 tarefas de teste", { solo: true });
+argParse.boolean("execute", "Executa uma tarefa normalmente", { solo: true });
+argParse.boolean("error", "Executa uma tarefa com erro", { solo: true });
 (async() => {
     if (argParse.validate()) {
+        if (params['list']) {
+            ////////////////////////////////////////////////////
+            // LISTAR TAREFAS PENDENTES
+            const listarTarefas = async () => {
+                console.log("//////////////////////////////////////////////////////////////////");
+                console.log("///// LISTAR TAREFAS PENDENTES")
+                console.log("//////////////////////////////////////////////////////////////////");
+                let tasks = await project.list('fila_teste');
+                await tools.debug(tasks);
+            }
+            await listarTarefas();
+        } else if (params['hist']) {
+            ////////////////////////////////////////////////////
+            // LISTAR HISTÓRICO DE TAREFAS EXECUTADAS
+            const listarProcessadas = async () => {
+                console.log("//////////////////////////////////////////////////////////////////");
+                console.log("///// LISTAR HISTÓRICO DE TAREFAS EXECUTADAS")
+                console.log("//////////////////////////////////////////////////////////////////");
+                let tasks = await project.list('fila_teste_hist');
+                await tools.debug(tasks);
+            }
+            await listarProcessadas();
+        } else if (params['add']) {
+            //////////////////////////////////////////////////////
+            /// ADICIONANDO VARIAS TAREFAS DE TESTE
+            console.log("//////////////////////////////////////////////////////////////////");
+            console.log("///// ADICIONANDO VARIAS TAREFAS DE TESTE")
+            console.log("//////////////////////////////////////////////////////////////////");
+            await project.add('fila_teste', { message: "Olá SubHeaven 1" });
+            await project.add('fila_teste', { message: "Olá SubHeaven 2" });
+            await project.add('fila_teste', { message: "Olá SubHeaven 3" });
+            await project.add('fila_teste', { message: "Olá SubHeaven 4" });
+            await project.add('fila_teste', { message: "Olá SubHeaven 5" });
+            await project.add('fila_teste', { message: "Olá SubHeaven 6" });
+            await project.add('fila_teste', { message: "Olá SubHeaven 7" });
+            await project.add('fila_teste', { message: "Olá SubHeaven 8" });
+            await project.add('fila_teste', { message: "Olá SubHeaven 9" });
+            await project.add('fila_teste', { message: "Olá SubHeaven 10" });
+        } else if (params['add-one'] !== '') {
+            //////////////////////////////////////////////////////
+            /// ADICIONANDO UMA TAREFA
+            console.log("//////////////////////////////////////////////////////////////////");
+            console.log("///// ADICIONANDO UMA TAREFA")
+            console.log("//////////////////////////////////////////////////////////////////");
+            await project.add('fila_teste', { message: params['add-one'] });
+        } else if (params['execute']) {
+            //////////////////////////////////////////////////////
+            /// PROCESSANDO UMA TAREFA
+            console.log("//////////////////////////////////////////////////////////////////");
+            console.log("///// PROCESSANDO UMA TAREFA")
+            console.log("//////////////////////////////////////////////////////////////////");
+            let log = await project.process('fila_teste', async (payload, task) => {
+                console.log(`Processando a task: ${task._id}`);
+                console.log('payload:');
+                console.log(payload);
+                // task.oioioi();
+                console.log("Task processada");
+            }, debug=true);
+            console.log("♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫");
+            console.log("♫♫♫  LOG                                                                       ♫♫♫");
+            console.log("♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫");
+            let lines = log.split("\n");
+            await lines.forEachAsync(async line => {
+                console.log(`♫♫♫  ${line}`);
+            });
+            console.log("♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫");
+        } else if (params['error']) {
+            //////////////////////////////////////////////////////
+            /// PROCESSANDO UMA TAREFA COM ERRO
+            console.log("//////////////////////////////////////////////////////////////////");
+            console.log("///// PROCESSANDO UMA TAREFA COM ERRO")
+            console.log("//////////////////////////////////////////////////////////////////");
+            let log = await project.process('fila_teste', async (payload, task) => {
+                console.log(`Processando a task: ${task._id}`);
+                console.log('payload:');
+                task.oioioi();
+            }, debug=true);
+            console.log("♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫");
+            console.log("♫♫♫  LOG                                                                       ♫♫♫");
+            console.log("♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫");
+            let lines = log.split("\n");
+            await lines.forEachAsync(async line => {
+                console.log(`♫♫♫  ${line}`);
+            });
+            console.log("♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫");
+        }
         // const database = require('subheaven-local-db')('fila_teste');
         // let dataset = await database.find('fila_teste', {});
         // await tools.debug(dataset);
@@ -73,28 +165,6 @@ argParse.positional("name", "Nome a ser cumprimentado", { required: false, defau
         // await project.add('fila_teste', { message: "Olá SubHeaven 8" });
         // await project.add('fila_teste', { message: "Olá SubHeaven 9" });
         // await project.add('fila_teste', { message: "Olá SubHeaven 10" });
-
-        ////////////////////////////////////////////////////
-        // LISTAR TAREFAS
-        const listarTarefas = async () => {
-            console.log("//////////////////////////////////////////////////////////////////");
-            console.log("///// LISTAR TAREFAS")
-            console.log("//////////////////////////////////////////////////////////////////");
-            let tasks = await project.list('fila_teste');
-            await tools.debug(tasks);
-        }
-        await listarTarefas();
-
-        ////////////////////////////////////////////////////
-        // LISTAR PROCESSADAS
-        const listarProcessadas = async () => {
-            console.log("//////////////////////////////////////////////////////////////////");
-            console.log("///// LISTAR PROCESSADAS")
-            console.log("//////////////////////////////////////////////////////////////////");
-            let tasks = await project.list('fila_teste_hist');
-            await tools.debug(tasks);
-        }
-        await listarProcessadas();
 
         //////////////////////////////////////////////////////
         /// CONSULTAR TAREFA LIVRE MAIS ANTIGA

@@ -1,0 +1,39 @@
+{"k":"0000000078","o":"0000000274","v":"001"}
+{"_id":2,"_uid":2,"_dt":1642513799611,"_s":"992c637f204cf134e09cfb109ff81639"}
+{"payload":{"message":"Olá SubHeaven 1"},"date":{"$wrap":"$date","v":1642513799604,"h":"2022-01-18T13:49:59.604Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799604,"h":"2022-01-18T13:49:59.604Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":2}}
+{"k":"0000000078","o":"0000000274","v":"001"}
+{"_id":3,"_uid":3,"_dt":1642513799614,"_s":"4819161681433a25232500431ecd3d92"}
+{"payload":{"message":"Olá SubHeaven 2"},"date":{"$wrap":"$date","v":1642513799613,"h":"2022-01-18T13:49:59.613Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799613,"h":"2022-01-18T13:49:59.613Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":3}}
+{"k":"0000000078","o":"0000000274","v":"001"}
+{"_id":4,"_uid":4,"_dt":1642513799615,"_s":"1c7f4fce983234a28b59048ab10562a3"}
+{"payload":{"message":"Olá SubHeaven 3"},"date":{"$wrap":"$date","v":1642513799615,"h":"2022-01-18T13:49:59.615Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799615,"h":"2022-01-18T13:49:59.615Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":4}}
+{"k":"0000000078","o":"0000000274","v":"001"}
+{"_id":5,"_uid":5,"_dt":1642513799616,"_s":"28ad058cde15b0bb859580b2473caa30"}
+{"payload":{"message":"Olá SubHeaven 4"},"date":{"$wrap":"$date","v":1642513799615,"h":"2022-01-18T13:49:59.615Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799615,"h":"2022-01-18T13:49:59.615Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":5}}
+{"k":"0000000078","o":"0000000274","v":"001"}
+{"_id":6,"_uid":6,"_dt":1642513799616,"_s":"65402d9a79084e0271e25cacbf7d6665"}
+{"payload":{"message":"Olá SubHeaven 5"},"date":{"$wrap":"$date","v":1642513799616,"h":"2022-01-18T13:49:59.616Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799616,"h":"2022-01-18T13:49:59.616Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":6}}
+{"k":"0000000078","o":"0000000274","v":"001"}
+{"_id":7,"_uid":7,"_dt":1642513799618,"_s":"7e692bd365a7b981d376642a51c57067"}
+{"payload":{"message":"Olá SubHeaven 6"},"date":{"$wrap":"$date","v":1642513799617,"h":"2022-01-18T13:49:59.617Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799617,"h":"2022-01-18T13:49:59.617Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":7}}
+{"k":"0000000078","o":"0000000274","v":"001"}
+{"_id":8,"_uid":8,"_dt":1642513799618,"_s":"3672c1b2f2153f82679ede065ca6cdbb"}
+{"payload":{"message":"Olá SubHeaven 7"},"date":{"$wrap":"$date","v":1642513799618,"h":"2022-01-18T13:49:59.618Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799618,"h":"2022-01-18T13:49:59.618Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":8}}
+{"k":"0000000078","o":"0000000274","v":"001"}
+{"_id":9,"_uid":9,"_dt":1642513799619,"_s":"20c3d79f49ccf45991eaf8d854311a7d"}
+{"payload":{"message":"Olá SubHeaven 8"},"date":{"$wrap":"$date","v":1642513799619,"h":"2022-01-18T13:49:59.619Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799619,"h":"2022-01-18T13:49:59.619Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":9}}
+{"k":"0000000080","o":"0000000275","v":"001"}
+{"_id":10,"_uid":10,"_dt":1642513799619,"_s":"6c5c8e052495a26de3400703d28a4cb7"}
+{"payload":{"message":"Olá SubHeaven 9"},"date":{"$wrap":"$date","v":1642513799619,"h":"2022-01-18T13:49:59.619Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799619,"h":"2022-01-18T13:49:59.619Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":10}}
+{"k":"0000000080","o":"0000000276","v":"001"}
+{"_id":11,"_uid":11,"_dt":1642513799620,"_s":"c44d63873b16cd1a13e715e7c8d1619e"}
+{"payload":{"message":"Olá SubHeaven 10"},"date":{"$wrap":"$date","v":1642513799620,"h":"2022-01-18T13:49:59.620Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513799620,"h":"2022-01-18T13:49:59.620Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":11}}
+{"k":"0000000080","o":"0000000279","v":"001"}
+{"_id":12,"_uid":12,"_dt":1642513818447,"_s":"117ebdc33d32aadd13de99d3a0574147"}
+{"payload":{"message":"Olá SubHeaven Teste"},"date":{"$wrap":"$date","v":1642513818431,"h":"2022-01-18T13:50:18.431Z"},"picked":false,"tryout":0,"history":[{"date":{"$wrap":"$date","v":1642513818431,"h":"2022-01-18T13:50:18.431Z"},"name":"added"}],"_id":{"$wrap":"$oid","v":12}}
+{"k":"0000000079","o":"0000000573","v":"001"}
+{"_id":2,"_uid":12,"_dt":1642515300645,"_s":"22dbc5c62b229a03ca78becd6b2cee36"}
+{"payload":{"message":"Olá SubHeaven 1"},"date":{"$wrap":"$date","v":1642513799604,"h":"2022-01-18T13:49:59.604Z"},"picked":true,"tryout":1,"history":[{"date":{"$wrap":"$date","v":1642513799604,"h":"2022-01-18T13:49:59.604Z"},"name":"added"},{"date":{"$wrap":"$date","v":1642515300640,"h":"2022-01-18T14:15:00.640Z"},"name":"picked"},{"date":{"$wrap":"$date","v":1642515300644,"h":"2022-01-18T14:15:00.644Z"},"name":"processed","log":"Processando a task: 2\npayload:\n{\n    \"message\": \"Olá SubHeaven 1\"\n}\nTask processada\n"}],"_id":{"$wrap":"$oid","v":2},"log":""}
+{"k":"0000000050","o":"0000000000","v":"001"}
+{"_id":2,"_uid":12,"_dt":1642515300648,"_a":"del"}
+

@@ -1,0 +1,3 @@
+{"k":"0000000078","o":"0000000654","v":"001"}
+{"_id":2,"_uid":2,"_dt":1642515300647,"_s":"8ee589ec430ea020ed27bd8650ca4f5b"}
+{"log":"Processando a task: 2\npayload:\n{\n    \"message\": \"Olá SubHeaven 1\"\n}\nTask processada\n","payload":{"message":"Olá SubHeaven 1"},"tryout":1,"date":{"$wrap":"$date","v":1642515300644,"h":"2022-01-18T14:15:00.644Z"},"history":[{"date":{"$wrap":"$date","v":1642513799604,"h":"2022-01-18T13:49:59.604Z"},"name":"added"},{"date":{"$wrap":"$date","v":1642515300640,"h":"2022-01-18T14:15:00.640Z"},"name":"picked"},{"date":{"$wrap":"$date","v":1642515300644,"h":"2022-01-18T14:15:00.644Z"},"name":"processed","log":"Processando a task: 2\npayload:\n{\n    \"message\": \"Olá SubHeaven 1\"\n}\nTask processada\n"}],"_id":{"$wrap":"$oid","v":2}}
