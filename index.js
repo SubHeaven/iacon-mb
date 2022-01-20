@@ -3,12 +3,13 @@ const tools = require('subheaven-tools');
 
 class IaconBroker {
     constructor(db_folder='database') {
+        this.taskHistorySize = 10;
         this.db_folder = db_folder;
         this.database = require('subheaven-local-db')(db_folder);
     }
 
     clearTaskHistory = async (list) => {
-        while (list.length > 5) {
+        while (list.length > this.taskHistorySize) {
             list.shift();
         }
         return list;
