@@ -7,6 +7,13 @@ class IaconBroker {
         this.database = require('subheaven-local-db')(db_folder);
     }
 
+    clearTaskHistory = async (list) => {
+        while (list.length > 5) {
+            list.shift();
+        }
+        return list;
+    }
+
     add = async (collection, payload) => {
         let newone = {
             payload: payload,
@@ -71,6 +78,7 @@ class IaconBroker {
                 date: new Date(),
                 name: 'picked'
             });
+            task.history = await this.clearTaskHistory(task.history);
             await this.database.update(collection, { _id: task._id }, task);
         }
         return task;
@@ -82,7 +90,17 @@ class IaconBroker {
             date: new Date(),
             name: 'rearm'
         });
+        task.history = await this.clearTaskHistory(task.history);
         await this.database.update(collection, { _id: task._id }, task);
+    };
+
+    rearmAll = async (collection) => {
+        let tasks = await this.list(collection);
+        await tasks.forEachAsync(async task => {
+            if (task.picked) {
+                await this.rearm(collection, task);
+            }
+        });
     };
 
     clearHistory = async (name) => {
@@ -140,6 +158,7 @@ class IaconBroker {
                                 name: 'processed',
                                 log: _log
                             });
+                            task.history = await this.clearTaskHistory(task.history);
                             await this.database.insert(`${name}_hist`, {
                                 log: _log,
                                 payload: payload,
@@ -148,7 +167,7 @@ class IaconBroker {
                                 history: task.history
                             });
                             await this.database.delete(name, { _id: task._id });
-                            await this.clearHistory(`${name}_hist`);
+                            await this.clearHistory(name);
                             log("Finalizando processo.");
                         } catch (ex) {
                             console.log = _oldlog;
@@ -170,6 +189,7 @@ class IaconBroker {
                                 name: 'error',
                                 log: _log
                             });
+                            task.history = await this.clearTaskHistory(task.history);
 
                             await this.database.update(name, { _id: task._id }, task);
                             await this.rearm(name, task);
